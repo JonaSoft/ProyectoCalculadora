@@ -1,84 +1,62 @@
 var calculadora={
+	primerOperando:'0',
+	segundoOperando:'0',
+	resultado:'0',
 	ejecuta:function(){
-	arrayTeclado=document.querySelectorAll('div>img');
-	arrayTeclado[0].setAttribute('onclick','efectoPresionaTecla(0)');
-	arrayTeclado[1].setAttribute('onclick','efectoPresionaTecla(1)');
-	arrayTeclado[2].setAttribute('onclick','efectoPresionaTecla(2)');
-	arrayTeclado[3].setAttribute('onclick','efectoPresionaTecla(3)');
-	arrayTeclado[4].setAttribute('onclick','efectoPresionaTecla(4)');
-	arrayTeclado[5].setAttribute('onclick','efectoPresionaTecla(5)');
-	arrayTeclado[6].setAttribute('onclick','efectoPresionaTecla(6)');
-	arrayTeclado[7].setAttribute('onclick','efectoPresionaTecla(7)');
-	arrayTeclado[8].setAttribute('onclick','efectoPresionaTecla(8)');
-	arrayTeclado[9].setAttribute('onclick','efectoPresionaTecla(9)');
-	arrayTeclado[10].setAttribute('onclick','efectoPresionaTecla(10)');
-	arrayTeclado[11].setAttribute('onclick','efectoPresionaTecla(11)');
-	arrayTeclado[12].setAttribute('onclick','efectoPresionaTecla(12)');
-	arrayTeclado[13].setAttribute('onclick','efectoPresionaTecla(13)');
-	arrayTeclado[14].setAttribute('onclick','efectoPresionaTecla(14)');
-	arrayTeclado[15].setAttribute('onclick','efectoPresionaTecla(15)');
-	arrayTeclado[16].setAttribute('onclick','efectoPresionaTecla(16)');
-	arrayTeclado[17].setAttribute('onclick','efectoPresionaTecla(17)');
-	arrayTeclado[18].setAttribute('onclick','efectoPresionaTecla(18)')
+		matrizTeclado=['on','sign','raiz','dividido','7','8','9','por','4','5','6','menos','1','2','3','0','punto','igual','mas'];
+		for (var i = 0; i < matrizTeclado.length; i++) {
+			posicion=matrizTeclado[i];
+			document.getElementById(posicion).addEventListener('click',efectoAlPresionaTecla);
+		};
 	}
 };
-	function efectoPresionaTecla(valor){						//FUNCION EFECTO AL PRESIONAR TECLA
-		identificador=arrayTeclado[valor].getAttribute('id');	// identifica id de tecla seleccionada
-		tecla=document.getElementById(identificador);			// ASIGNA ID A tecla
-		tecla.style="padding:1px;background:#BDBDBD;";
-		setTimeout(function(){retornaEfectoTecla()},200);
-		function retornaEfectoTecla(){
-			if (valor='18') {
-					tecla.style="width:90%;";
-					tecla.style="height:100%;";
-					tecla.style="padding:0px;";
-				}else
-					{
-						tecla.style="width:22%;";
-					}
-		}
-		datosPantalla(identificador);
-	}
-	// LLAMADO A FUNCIOS DATOSPANTALLA CON TECLA COMO IDENTIFICADOR
-	function datosPantalla(valorTecla){
-		valorPantalla=document.getElementById('display');
-		//*****APLICACION TECLAS ESPECIALES ON, PUNTO, RAIZ, SIGN
-		if(valorTecla=='on'){										// SI PRESIONO TECLA ON
-			valorTecla='0';
-			valorPantalla.textContent='0';						// 'ON'INICICIALIZA A CERO CONTENIDO DE SPAN 'DISPLAY'
-		}else if (valorTecla=='punto'){							// SI PRESIONA TECLA PUNTO
-				buscaDigito=valorPantalla.textContent.indexOf('.');
-			if (buscaDigito==-1) {
-				valorTecla='.';
-				if (valorPantalla.textContent=='0') {
-					valorPantalla.textContent='0.';
-					}else{
-						valorPantalla.textContent+=valorTecla;
+	function efectoAlPresionaTecla(){									//FUNCION DE EFECTO AL PRESIONAR LAS TECLAS
+			identificador=this.id;											//CAPTURA DEL ID DE LA TECLA PRESIONADA
+			tecla=document.getElementById(identificador);
+			tecla.style="padding:1px;background:#BDBDBD;";
+			setTimeout(function(){retornaEfectoTecla()},200);
+			function retornaEfectoTecla(){
+				if (valor='18') {
+						tecla.style="width:90%;";
+						tecla.style="height:100%;";
+						tecla.style="padding:0px;";
+					}else
+						{
+							tecla.style="width:22%;";
 						}
-
+			}
+		procesamientoData(identificador);										// INVOCA A FUNCION PROCESAMIENTOPANTALLA
+	}
+	function procesamientoData(valorTecla){									// PARAMETRO identificador RECIBIDO POR FUNCION PROCESAMIENTODATA
+		valorPantalla=document.getElementById('display');
+		if(valorTecla=='on'){
+			valorTecla='0';
+			valorPantalla.textContent='0';
+			resultado='0';
+		}else if (valorTecla=='punto'){											// SI PRESIONA TECLA PUNTO
+				buscaDigito=valorPantalla.textContent.indexOf('.');		//BUSCA SI EL PUNTO YA EXISTE EN PANTALLA
+			if (buscaDigito==-1){
+					if (valorPantalla.textContent=='') {
+						valorPantalla.textContent='0';
+					}
+				valorPantalla.textContent+='.';
 			}else{
-				valorTecla='';
-				valorPantalla.textContent=valorPantalla.textContent;
-				}
-			}else if (valorTecla=='raiz'){
 					valorPantalla.textContent=valorPantalla.textContent;
-					}else if (valorTecla=='sign'){
-							if (valorPantalla.textContent.indexOf("-",0)==-1){
-								valorTecla='';
-								if (valorPantalla.textContent=='0') {
-									valorTecla='';
-									valorPantalla.textContent=0;
+				}
+			}else if (valorTecla=='raiz'){										// SI PRESIONA TECLA RAIZ
+					valorPantalla.textContent=valorPantalla.textContent;
+					}else if (valorTecla=='sign'){								// SI PRESIONA TECLA SIGN
+								if (valorPantalla.textContent.indexOf("-",0)==-1){
+									if (valorPantalla.textContent=='0') {
+										valorPantalla.textContent='0';
+									}else{
+										valorPantalla.textContent='-'+valorPantalla.textContent;
+										valorPantalla.textContent=valorPantalla.textContent.substring(0,8);
+										}
 								}else{
-									valorPantalla.textContent='-'+valorPantalla.textContent;
-									valorTecla='';
-									valorPantalla.textContent=valorPantalla.textContent.substring(0,8);
-									}
-							}else{
-									valorPantalla.textContent=valorPantalla.textContent.substring(1);
-									valorTecla='';
-								}
-			//*****APLICACION DE TECLAS OPERADORES
-						  }else if (((valorTecla=='mas')|(valorTecla=='menos'))|((valorTecla=='por')|(valorTecla=='dividido'))){
+										valorPantalla.textContent=valorPantalla.textContent.substring(1);
+								 }
+						   }else if (((valorTecla=='mas')|(valorTecla=='menos'))|((valorTecla=='por')|(valorTecla=='dividido'))){
 									if (valorTecla=='mas'){
 										operacion='+';
 										}else if (valorTecla=='menos'){
@@ -88,40 +66,51 @@ var calculadora={
 														}else if(valorTecla=='dividido'){
 																operacion='÷';
 																}
-								valorTecla=' ';
-								primerOperando=valorPantalla.textContent;
-								valorPantalla.textContent=' ';
-					}else if (valorTecla=='igual'){
-							segundoOperando=valorPantalla.textContent;
-		  				 	if (operacion=='+') {
-								resultado=parseFloat(primerOperando)+parseFloat(segundoOperando);
-								resultado=resultado.toString();
-								}else if (operacion=='-') {
-										resultado=parseFloat(primerOperando)-parseFloat(segundoOperando);
-										resultado=resultado.toString();
-										}else if(operacion=='*'){
-												resultado=parseFloat(primerOperando)*parseFloat(segundoOperando);
-												resultado=resultado.toString();
-												}else if (operacion=='÷'){
-														resultado=parseFloat(primerOperando)/parseFloat(segundoOperando);
-														resultado=resultado.toString();
-														}
-							valorPantalla.textContent=resultado.substring(0,8)
-								}else if((valorTecla=='0')|(valorTecla=='0')){
-											if (valorPantalla.textContent=='0') {
-												valorPantalla.textContent='0';
-												}else{
-														valorPantalla.textContent=valorPantalla.textContent+valorTecla;
-														resultado=valorPantalla.textContent.substring(0,8);
-														valorPantalla.textContent=resultado;
-													 }
-										}else if (valorPantalla.textContent=='0'){
-												valorPantalla.textContent=' '
-												valorPantalla.textContent=valorTecla;
-												}else{
-														valorPantalla.textContent=valorPantalla.textContent+valorTecla;
-														resultado=valorPantalla.textContent.substring(0,8);
-														valorPantalla.textContent=resultado;
-													}
+								primerOperando=valorPantalla.textContent;			//CAPTURA PRIMER OPERANDO
+								valorPantalla.textContent='';
+								}else if (valorTecla=='igual'){						//SI PRESIONA TECLA IGUAL
+												if (primerOperando=='0') {
+													primerOperando=valorPantalla.textContent;
+												}else {
+														segundoOperando=valorPantalla.textContent;
+												}
+											primerOperando=parseFloat(primerOperando);
+											segundoOperando=parseFloat(segundoOperando);
+												switch (operacion) {						//EJECUTA FUNCIONES SEGUN OPERACION SELECCIONADA
+														case '+':	var suma=function(num1,num2){
+																		return num1+num2;
+																}
+															resultado=suma(primerOperando,segundoOperando);
+															break;
+														case '-':	var resta=function(num1,num2){
+																		return num1-num2;
+																}
+															resultado=resta(primerOperando,segundoOperando);
+															break;
+														case '*':	var multiplica=function(num1,num2){
+																		return num1*num2;
+															}
+															resultado=multiplica(primerOperando,segundoOperando);
+															break;
+														default:	var dividir=function(num1,num2){
+																	return num1/num2;
+																	}
+															resultado=dividir(primerOperando,segundoOperando)
+												}
+											primerOperando='0'; 		//INICIALIZA PARA APLICAR OPERACION SOBRE EL RESULTADO CUANDO SOLO PRESIONA TECLA IGUAL
+											valorPantalla.textContent=(resultado.toString()).substring(0,8) //ACUMULACION DE NUMEROS
+											}else if(valorTecla=='0'){													 //Y VALIDACION DE 8 CARACTERES
+														if (valorPantalla.textContent=='0') {
+																valorPantalla.textContent='0';
+															}else{
+																	resultado=valorPantalla.textContent+valorTecla;
+																	valorPantalla.textContent=resultado.substring(0,8);
+																 }
+														}else if (valorPantalla.textContent=='0'){
+																		valorPantalla.textContent=valorTecla;
+																}else{
+																		resultado=valorPantalla.textContent+valorTecla;
+																		valorPantalla.textContent=resultado.substring(0,8);
+																		}
 	};
-	calculadora.ejecuta();
+calculadora.ejecuta();
