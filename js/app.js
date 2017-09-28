@@ -2,6 +2,7 @@ var calculadora={
 	primerOperando:'0',
 	segundoOperando:'0',
 	resultado:'0',
+	identificador:0,					
 	ejecuta:function(){
 		matrizTeclado=['on','sign','raiz','dividido','7','8','9','por','4','5','6','menos','1','2','3','0','punto','igual','mas'];
 		for (var i = 0; i < matrizTeclado.length; i++) {
@@ -16,7 +17,7 @@ var calculadora={
 			tecla.style="padding:1px;background:#BDBDBD;";
 			setTimeout(function(){retornaEfectoTecla()},200);
 			function retornaEfectoTecla(){
-				if (valor='18') {
+				if (identificador=='mas') {				
 						tecla.style="width:90%;";
 						tecla.style="height:100%;";
 						tecla.style="padding:0px;";
